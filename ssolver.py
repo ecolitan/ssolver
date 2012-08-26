@@ -98,10 +98,29 @@ class sPosition():
                 if len(_possibilites) is 1:
                     _possibilites = _possibilites[0]
                 self.UpdateField([i,j], _possibilites)
+        
+    def SearchHiddenSingles(self):
+        """Search for hidden singles in cubes, rows and cols"""
+        for _cube in [self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8]:
+            _templist = []
+            for _ij in _cube:
+                if type(self.position[_ij[0]][_ij[1]]) is list:
+                    _templist.append([_ij,self.position[_ij[0]][_ij[1]]])
+            # exclude numbers common to all lists, to find hidden single
+            
+            # _templist = [ [_ij, _list1], [_ij, _list2], [_ij, _list3] ]
+            
+                    
                 
 testObj = sPosition()
 testObj.UpdatePosition(testposition)
 testObj.UpdateFieldPossibilies()
-print testObj
+#print testObj
 if testObj.IsSolved():
     print "Solved!!!"
+
+a = [[1,5,9],[1,5,6,9],[1,9],[1,5,9]]
+print set(a)
+
+
+
