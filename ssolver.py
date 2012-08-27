@@ -70,6 +70,24 @@ class sPosition():
                     return False
         return True
         
+    def MapCoordCube(self, _ij):
+        """Return the cube that a coord belongs to."""
+        for _cube in [self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8]:
+            if _ij in _cube:
+                return _cube
+                
+    def MapCoordCol(self, _ij):
+        """Return the col that a coord belongs to."""
+        for _col in [self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6, self.col7, self.col8]:
+            if _ij in _col:
+                return _col
+                
+    def MapCoordRow(self, _ij):
+        """Return the row that a coord belongs to."""
+        for _row in [self.row0, self.row1, self.row2, self.row3, self.row4, self.row5, self.row6, self.row7, self.row8]:
+            if _ij in _row:
+                return _row
+        
     def UpdateFieldPossibilies(self):
         """Create possibility lists and update position"""
         for i in xrange(0,9):
@@ -77,24 +95,19 @@ class sPosition():
                 if self.position[i][j] is not None:
                     continue
                 else:
-                    _possibilites = [1,2,3,4,5,6,7,8,9]        
-                    # find cube, row and col
-                    for _cube in [self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8]:
-                        if [i,j] in _cube:
-                            for _ij in _cube:
-                                if type(self.position[_ij[0]][_ij[1]]) is int:
-                                    _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
-                            cube = _cube
-                    for _row in [self.row0, self.row1, self.row2, self.row3, self.row4, self.row5, self.row6, self.row7, self.row8]:
-                        if [i,j] in _row:
-                            for _ij in _row:
-                                if type(self.position[_ij[0]][_ij[1]]) is int:
-                                    _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
-                    for _col in [self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6, self.col7, self.col8]:
-                        if [i,j] in _row:
-                            for _ij in _row:
-                                if type(self.position[_ij[0]][_ij[1]]) is int:
-                                    _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
+                    _possibilites = [1,2,3,4,5,6,7,8,9]
+                    _cube = self.MapCoordCube([i, j])
+                    for _ij in _cube:
+                        if type(self.position[_ij[0]][_ij[1]]) is int:
+                            _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
+                    _row = self.MapCoordRow([i, j])
+                    for _ij in _row:
+                        if type(self.position[_ij[0]][_ij[1]]) is int:
+                            _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
+                    _col = self.MapCoordCol([i, j])
+                    for _ij in _col:
+                        if type(self.position[_ij[0]][_ij[1]]) is int:
+                            _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
                 if len(_possibilites) is 1:
                     _possibilites = _possibilites[0]
                 self.UpdateField([i,j], _possibilites)
@@ -107,8 +120,6 @@ class sPosition():
                 for _ij in _position:
                     if type(self.position[_ij[0]][_ij[1]]) is list:
                         _templist.append([_ij,self.position[_ij[0]][_ij[1]]])
-                # exclude numbers common to all lists, to find hidden single
-                # _templist = [ [_ij, _list1], [_ij, _list2], [_ij, _list3] ]
                 _catlist = []
                 _singles = []
                 for _list in _templist:
@@ -123,6 +134,7 @@ class sPosition():
         updateSingles([self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8])
         updateSingles([self.row0, self.row1, self.row2, self.row3, self.row4, self.row5, self.row6, self.row7, self.row8])
         updateSingles([self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6, self.col7, self.col8])
+              
                 
 testObj = sPosition()
 testObj.UpdatePosition(testposition)
