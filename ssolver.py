@@ -101,26 +101,34 @@ class sPosition():
         
     def SearchHiddenSingles(self):
         """Search for hidden singles in cubes, rows and cols"""
-        for _cube in [self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8]:
-            _templist = []
-            for _ij in _cube:
-                if type(self.position[_ij[0]][_ij[1]]) is list:
-                    _templist.append([_ij,self.position[_ij[0]][_ij[1]]])
-            # exclude numbers common to all lists, to find hidden single
-            
-            # _templist = [ [_ij, _list1], [_ij, _list2], [_ij, _list3] ]
-            
-                    
+        def updateSingles(_position_list):
+            for _position in _position_list:
+                _templist = []
+                for _ij in _position:
+                    if type(self.position[_ij[0]][_ij[1]]) is list:
+                        _templist.append([_ij,self.position[_ij[0]][_ij[1]]])
+                # exclude numbers common to all lists, to find hidden single
+                # _templist = [ [_ij, _list1], [_ij, _list2], [_ij, _list3] ]
+                _catlist = []
+                _singles = []
+                for _list in _templist:
+                    _catlist = _catlist + _list[1]
+                for _poss in [1,2,3,4,5,6,7,8,9]:
+                    if _catlist.count(_poss) == 1:
+                        _singles.append(_poss)
+                for _list in _templist:
+                    for _poss in _singles:
+                        if (_poss in _list[1]):
+                            self.UpdateField(_list[0], _poss)
+        updateSingles([self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8])
+        updateSingles([self.row0, self.row1, self.row2, self.row3, self.row4, self.row5, self.row6, self.row7, self.row8])
+        updateSingles([self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6, self.col7, self.col8])
                 
 testObj = sPosition()
 testObj.UpdatePosition(testposition)
 testObj.UpdateFieldPossibilies()
-#print testObj
+testObj.SearchHiddenSingles()
+print testObj
 if testObj.IsSolved():
     print "Solved!!!"
-
-a = [[1,5,9],[1,5,6,9],[1,9],[1,5,9]]
-print set(a)
-
-
 
