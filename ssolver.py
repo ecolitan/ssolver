@@ -1,15 +1,4 @@
-
-testposition = [[5,3,None,None,7,None,None,None,None],
-              [6,None,None,1,9,5,None,None,None],
-              [None,9,8,None,None,None,None,6,None],
-              [8,None,None,None,6,None,None,None,3],
-              [4,None,None,8,None,3,None,None,1],
-              [7,None,None,None,2,None,None,None,6],
-              [None,6,None,None,None,None,2,8,None],
-              [None,None,None,4,1,9,None,None,5],
-              [None,None,None,None,8,None,None,7,9]]
-
-class sPosition():
+class SSolver():
     def __init__(self):
         self.position = [[None,None,None,None,None,None,None,None,None],
                          [None,None,None,None,None,None,None,None,None],
@@ -134,13 +123,3 @@ class sPosition():
         updateSingles([self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8])
         updateSingles([self.row0, self.row1, self.row2, self.row3, self.row4, self.row5, self.row6, self.row7, self.row8])
         updateSingles([self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6, self.col7, self.col8])
-              
-                
-testObj = sPosition()
-testObj.UpdatePosition(testposition)
-testObj.UpdateFieldPossibilies()
-testObj.SearchHiddenSingles()
-print testObj
-if testObj.IsSolved():
-    print "Solved!!!"
-
