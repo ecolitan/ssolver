@@ -57,6 +57,22 @@ class SSolver():
             for j in xrange(0,9):
                 if type(self.position[i][j]) is not int:
                     return False
+        for _grouping in [self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5,
+                            self.cube6, self.cube7, self.cube8, self.col0, self.col1, self.col2,
+                            self.col3, self.col4, self.col5, self.col6, self.col7, self.col8,
+                            self.row0, self.row1, self.row2, self.row3, self.row4, self.row5,
+                            self.row6, self.row7, self.row8]:
+            _poss = [1,2,3,4,5,6,7,8,9]
+            for _ij in _grouping:
+                if type(self.position[_ij[0]][_ij[1]]) is not int:
+                    return False
+                try:
+                    _poss.remove(self.position[_ij[0]][_ij[1]])
+                except ValueError:
+                    print "Error: Solution Inconsistent!"
+                    return False
+            if _poss:
+                return False
         return True
         
     def MapCoordCube(self, _ij):
@@ -123,3 +139,5 @@ class SSolver():
         updateSingles([self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8])
         updateSingles([self.row0, self.row1, self.row2, self.row3, self.row4, self.row5, self.row6, self.row7, self.row8])
         updateSingles([self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6, self.col7, self.col8])
+
+
