@@ -9,8 +9,14 @@ testposition = [[5,3,None,None,7,None,None,None,None],
               [None,6,None,None,None,None,2,8,None],
               [None,None,None,4,1,9,None,None,5],
               [None,None,None,None,8,None,None,7,9]]
-testObj = SSolver()
-testObj.UpdatePosition(testposition)
-testObj.UpdateFieldPossibilies()
-testObj.SearchHiddenSingles()
-testObj.IsSolved()
+        
+#~ testObj = SSolver()
+#~ testObj.PrintPosition()
+#~ testObj.UpdatePosition(testposition)
+#~ testObj.PrintPosition()
+#~ testObj.UpdateFieldPossibilies()
+#~ testObj.PrintPosition()
+#~ testObj.SearchHiddenSingles()
+
+
+

@@ -1,3 +1,5 @@
+import sys
+
 class SSolver():
     def __init__(self):
         self.position = [[None,None,None,None,None,None,None,None,None],
@@ -46,6 +48,12 @@ class SSolver():
     def UpdatePosition(self, _positionvector):
         self.position = _positionvector
         
+    def PrintPosition(self):
+        """Print the current position"""
+        for i in range(0,len(self.position)):
+            print "Row",i,self.position[i]
+        print '\n'
+        
     def UpdateField(self, _ij, _n):
         """_ij is a list with coordinates
         n is the new number or list"""
@@ -75,6 +83,19 @@ class SSolver():
                 return False
         return True
         
+    def ConvertGroup(self, _group):
+        for index, _ij in enumerate(_group):
+            _group[index] = self.position[_ij[0]][_ij[1]]
+        return _group
+        
+    def CheckConsistent(self, _group):
+        """Check that a group (row,cube,col)is consistent"""
+        _group = self.ConvertGroup(_group)
+        for i in [1,2,3,4,5,6,7,8,9]:
+            if _group.count(i) > 1:
+                sys.exit("Inconsistent solution: {0}".format(_group))
+        return True
+        
     def MapCoordCube(self, _ij):
         """Return the cube that a coord belongs to."""
         for _cube in [self.cube0, self.cube1, self.cube2, self.cube3, self.cube4, self.cube5, self.cube6, self.cube7, self.cube8]:
@@ -101,10 +122,13 @@ class SSolver():
                     continue
                 else:
                     _possibilites = [1,2,3,4,5,6,7,8,9]
+                    print i, j
                     _cube = self.MapCoordCube([i, j])
+                    print _cube
                     for _ij in _cube:
                         if type(self.position[_ij[0]][_ij[1]]) is int:
                             _possibilites = filter (lambda a: a != self.position[_ij[0]][_ij[1]], _possibilites)
+                    self.CheckConsistent(_cube)
                     _row = self.MapCoordRow([i, j])
                     for _ij in _row:
                         if type(self.position[_ij[0]][_ij[1]]) is int:
