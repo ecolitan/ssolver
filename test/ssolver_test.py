@@ -24,12 +24,6 @@ class TestSSolver(unittest.TestCase):
     def setUp(self):
         pass
         
-    def sort_nested(self, group):
-        group.sort()
-        for i in group:
-            i.sort()
-        return group
-        
     def test_test_group(self):
         # test_group([group])
         
@@ -54,8 +48,15 @@ class TestSSolver(unittest.TestCase):
         #good groups should return True
         self.assertTrue(SSolver().test_group(good_group))
         
-    def test_fill_group(self):
-        # fill_group([group])
+    def test_search_hidden_singles(self):
+        # search_hidden_singles([group])
+        
+        def sort_nested(group):
+            """To test equality of nested lists regardless of ordering"""
+            group.sort()
+            for i in group:
+                i.sort()
+            return group
         
         test1   = [ [],[],[],[],[],[],[],[],[] ]
         result1 = [ [1,2,3,4,5,6,7,8,9],
@@ -89,57 +90,54 @@ class TestSSolver(unittest.TestCase):
                     
         test3   = [ [1],[2],[3],[4],[5],[6],[7],[8],[9] ]
         result3 = [ [1],[2],[3],[4],[5],[6],[7],[8],[9] ]
-                            
-        self.assertEqual(result1, SSolver().fill_group(test1))
-        self.assertEqual(result2, SSolver().fill_group(test2))
-        self.assertEqual(result3, SSolver().fill_group(test3))
         
+        test4 =   [ [1],
+                    [2,3],
+                    [3,4],
+                    [5],
+                    [6,7,8,9],
+                    [6,7,8,9],
+                    [6,7,8,9],
+                    [6,7,8,9],
+                    [4,6,7,8,9] ]
+        result4 = [ [1],
+                    [2],
+                    [3],
+                    [5],
+                    [6,7,8,9],
+                    [6,7,8,9],
+                    [6,7,8,9],
+                    [6,7,8,9],
+                    [4] ]
+                    
+        test5 =   [ [1],
+                    [1,2],
+                    [2,3],
+                    [3,4],
+                    [4,5],
+                    [5,6],
+                    [6,7],
+                    [7,8],
+                    [8,9], ]
+        result5 = [ [1],
+                    [2],
+                    [3],
+                    [4],
+                    [5],
+                    [6],
+                    [7],
+                    [8],
+                    [9] ]
+                    
+        #test return of basic groups
+        self.assertEqual(result1, SSolver().search_hidden_singles(test1))
+        self.assertEqual(result2, SSolver().search_hidden_singles(test2))
+        self.assertEqual(result3, SSolver().search_hidden_singles(test3))
         
-    #~ def test_search_hidden_singles(self):
-        #~ #search_hidden_singles()
-        #~ 
-        #~ test1 =   [ [1],
-                    #~ [2,3],
-                    #~ [3,4],
-                    #~ [5],
-                    #~ [6,7,8,9],
-                    #~ [6,7,8,9],
-                    #~ [6,7,8,9],
-                    #~ [6,7,8,9],
-                    #~ [4,6,7,8,9] ]
-        #~ result1 = [ [1],
-                    #~ [2],
-                    #~ [3],
-                    #~ [5],
-                    #~ [6,7,8,9],
-                    #~ [6,7,8,9],
-                    #~ [6,7,8,9],
-                    #~ [6,7,8,9],
-                    #~ [4] ]
-                    #~ 
-        #~ test2 =   [ [1],
-                    #~ [1,2],
-                    #~ [2,3],
-                    #~ [3,4],
-                    #~ [4,5],
-                    #~ [5,6],
-                    #~ [6,7],
-                    #~ [7,8],
-                    #~ [8,9], ]
-        #~ result2 = [ [1],
-                    #~ [2],
-                    #~ [3],
-                    #~ [4],
-                    #~ [5],
-                    #~ [6],
-                    #~ [7],
-                    #~ [8],
-                    #~ [9] ]
-                    #~ 
-        #~ #order not important for this test
-        #~ self.assertEqual(self.sort_nested(result1), self.sort_nested(SSolver().fill_group(test1)))
-        #~ self.assertEqual(result2, SSolver().fill_group(test2))
-
+        #test finding hidden singles
+        #order not important for this test
+        self.assertEqual(sort_nested(result4), sort_nested(SSolver().search_hidden_singles(test4)))
+        self.assertEqual(result5, SSolver().search_hidden_singles(test5))
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestSSolver)
 unittest.TextTestRunner(verbosity=2).run(suite)

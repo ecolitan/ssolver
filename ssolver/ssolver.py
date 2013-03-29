@@ -24,16 +24,32 @@ class SSolver():
     def __init__(self):
         pass
         
-    def fill_group(self, group):
+    def test_group(self, group):
         """
-        return group with possible values filled in.
+        test group is valid
+        """
+        
+        if (not len(group) == 9):
+            raise DimError()
+            
+        if (not type(group) == list):
+            raise DimError()
+            
+        for word in group:
+            if not type(word) == list:
+                raise DimError()
+                
+        return True
+        
+    def search_hidden_singles(self, group):
+        """
+        reduce group to find hidden singles
+        leave other squares with reduced possible values lists
         """
         all_possibility = [1,2,3,4,5,6,7,8,9]
         known_numbers = []
         
-        
-        
-        #loop until group unchanged
+        #reduce group until no further hidden_singles
         startgroup = []
         while not (group == startgroup):
             startgroup = copy.deepcopy(group)
@@ -62,23 +78,8 @@ class SSolver():
                         except:
                             continue
         return group
-        
-    def test_group(self, group):
-        """
-        test group is valid
-        """
-        
-        if (not len(group) == 9):
-            raise DimError()
-            
-        if (not type(group) == list):
-            raise DimError()
-            
-        for word in group:
-            if not type(word) == list:
-                raise DimError()
                 
-        return True
+
             
             
         
