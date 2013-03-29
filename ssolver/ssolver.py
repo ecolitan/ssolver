@@ -79,8 +79,14 @@ class SSolver():
                             continue
         return group
                 
-
-            
+    def search_locked_candidate_box(self, row_set):
+        """
+        find and reduce locked candidates in a box
+        
+        row_set must be a list of three adjacent boxes: [group1, group2, group3]
+        these should already be reduced for hidden singles. 
+        """
+        pass
             
         
         

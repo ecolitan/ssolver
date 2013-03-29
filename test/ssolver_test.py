@@ -138,6 +138,11 @@ class TestSSolver(unittest.TestCase):
         #order not important for this test
         self.assertEqual(sort_nested(result4), sort_nested(SSolver().search_hidden_singles(test4)))
         self.assertEqual(result5, SSolver().search_hidden_singles(test5))
-
+        
+    def test_search_locked_candidate_box(self):
+        #search_locked_candidate_box()
+        pass
+    
+    
 suite = unittest.TestLoader().loadTestsFromTestCase(TestSSolver)
 unittest.TextTestRunner(verbosity=2).run(suite)
