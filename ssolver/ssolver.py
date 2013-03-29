@@ -1,6 +1,104 @@
+'''
+    ssolver: Solve sudoku puzzles.
+    Copyright (C) <2012-2013>  <Aaron Cossey (aaron dot cossey at gmail dot com)>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 import sys
+import copy
+from collections import Counter
 
 class SSolver():
+    def __init__(self):
+        pass
+        
+    def fill_group(self, group):
+        """
+        return group with possible values filled in.
+        """
+        all_possibility = [1,2,3,4,5,6,7,8,9]
+        known_numbers = []
+        
+        
+        
+        #loop until group unchanged
+        startgroup = []
+        while not (group == startgroup):
+            startgroup = copy.deepcopy(group)
+            # find unique items in group
+            u_elements = [k for k, v in Counter([item for sublist in group for item in sublist]).iteritems() if v == 1 ]
+            for element in group:
+                #if single value already in a square, add to known_numbers and continue
+                if len(element) == 1:
+                    known_numbers.append(element[0])
+                    continue
+                    
+            for position, element in enumerate(group):
+                #if square empty, square = all_possibility - known_numbers
+                if len(element) == 0:
+                    group[position] = list(set(all_possibility) - set(known_numbers))
+                    
+                #if square has multiple possibilities, square = possibility - known_numbers
+                if len(element) >1:
+                    group[position] = list(set(group[position]) - set(known_numbers))
+                    
+                    #if a number in square-possiblities is unique in the group, assign it
+                    for number in element:
+                        try:
+                            if number in u_elements:
+                                group[position] = [number]
+                        except:
+                            continue
+        return group
+        
+    def test_group(self, group):
+        """
+        test group is valid
+        """
+        
+        if (not len(group) == 9):
+            raise DimError()
+            
+        if (not type(group) == list):
+            raise DimError()
+            
+        for word in group:
+            if not type(word) == list:
+                raise DimError()
+                
+        return True
+            
+            
+        
+        
+        
+        
+class DimError(Exception):
+    def __init__(self, msg=''):
+        self.msg = msg
+        print self.msg
+
+
+
+
+
+
+
+
+
+class SSolverOld():
     def __init__(self):
         self.position = [[None,None,None,None,None,None,None,None,None],
                          [None,None,None,None,None,None,None,None,None],
