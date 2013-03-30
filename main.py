@@ -16,13 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from test import ssolver_test
+from test import ssolver_test, board_test
 
 version = '0.0.1'
 
 def main():
     # Unittests
     ssolver_test
+    board_test
 
 if __name__ == '__main__':
     main()

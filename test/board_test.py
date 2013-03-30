@@ -18,11 +18,12 @@
 
 import unittest
 from ssolver.ssolver import SSolver, DimError
+from ssolver.board import BoardSquare
 
 class TestBoardSquare(unittest.TestCase):
     
     def setUp(self):
         pass
 
-suite = unittest.TestLoader().loadTestsFromTestCase(TestSSolver)
+suite = unittest.TestLoader().loadTestsFromTestCase(TestBoardSquare)
 unittest.TextTestRunner(verbosity=2).run(suite)

@@ -19,4 +19,4 @@
 __author__ = "Aaron Cossey"
 __version__ = "0.0.1"
 
-__all__ = ['ssolver']
+__all__ = ['ssolver', 'board']
