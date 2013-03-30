@@ -142,7 +142,19 @@ class TestSSolver(unittest.TestCase):
     def test_search_locked_candidate_box(self):
         #search_locked_candidate_box()
         pass
-    
+        test_group1 = [ [1,6],[1,5,7,8],[1,5,7],[1,4,3],[1,3,4,5,7,8],[2],[1,4,6],[9],[1,4,5] ]
+        test_group2 = [ [9],[1,2,5,7,8],[1,2,5,8],[6],[1,4,5,7,8],[1,5,8],[2,4,5],[1,2,4,5,8],[3] ]
+        test_group3 = [ [4],[3],[1,5,6,8],[9],[5,8],[1,5,8],[2,6,8],[2,5,6,8],[7] ]
+        test_row_set1 = [test_group1, test_group2, test_group3]
+        
+        #TODO
+        
+        result_group1 = [ [1,6],[1,5,7,8],[1,5,7],[1,4,3],[1,3,4,5,7,8],[2],[1,4,6],[9],[1,4,5] ]
+        result_group2 = [ [9],[1,2,5,7,8],[1,2,5,8],[6],[1,4,5,7,8],[1,5,8],[2,4,5],[1,2,4,5,8],[3] ]
+        result_group3 = [ [4],[3],[1,5,6,8],[9],[5,8],[1,5,8],[2,6,8],[2,5,6,8],[7] ]
+        result_row_set1 = [result_group1, result_group2, result_group3]
+        
+        
     
 suite = unittest.TestLoader().loadTestsFromTestCase(TestSSolver)
 unittest.TextTestRunner(verbosity=2).run(suite)
