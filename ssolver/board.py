@@ -16,9 +16,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-class BoardSquare(object):
+from collections import OrderedDict
+
+class BoardBlock(object):
     """
     Base object for sudoku board
+    
+    There are 9 Blocks on the sudoku board.
     """
-    def __init__(self):
-        pass
+    def __init__(self,position=(),squares=OrderedDict()):
+        self.position = position          # Position of Block 
+        self.squares = squares            # OrderedDict( ( (x0,y0),[] ), ((x1,y1), []), ... , ((xn,yn), []) )
+        
+    def group(self):
+        """
+        Return the possible-values list of the Block
+        """
+        return self.squares.values()
+        
+    
+#~ a=BoardBlock()
+#~ print a.__dict__
