@@ -129,6 +129,9 @@ class TestSSolver(unittest.TestCase):
                     [8],
                     [9] ]
                     
+        test6 = [[2], [1, 9], [1, 5, 9], [3], [8], [1, 5, 6, 9], [4], [7], [1, 5, 9]]
+        result6 = [[2], [1, 9], [1, 5, 9], [3], [8], [6], [4], [7], [1, 5, 9]]
+        
         #test return of basic groups
         self.assertEqual(result1, SSolver().search_hidden_singles(test1))
         self.assertEqual(result2, SSolver().search_hidden_singles(test2))
@@ -138,6 +141,7 @@ class TestSSolver(unittest.TestCase):
         #order not important for this test
         self.assertEqual(sort_nested(result4), sort_nested(SSolver().search_hidden_singles(test4)))
         self.assertEqual(result5, SSolver().search_hidden_singles(test5))
+        self.assertEqual(result6, SSolver().search_hidden_singles(test6))
         
     def test_search_locked_candidate_box(self):
         #search_locked_candidate_box()
