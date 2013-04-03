@@ -49,8 +49,42 @@ class TestBoardBlock(unittest.TestCase):
         test_block1 = BoardBlock(test_pos1, test_squares1)
         
         self.assertEqual(test_group1, test_block1.group())
-
-suite = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlock)
+        
+    def test_update_squares_from_group(self):
+        #update_squares_from_group()
+        
+        test_pos2 = (0,0)
+        test_group2 = [[2], [1, 9], [1, 5, 9], [3], [8], [6], [4], [7], [1, 5, 9]]
+        test_squares2 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[1,5,6,9]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_squares3 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_block2 = BoardBlock(test_pos2, test_squares2)
+        
+        self.assertEqual(test_squares3, test_block2.update_squares_from_group(test_group2))
+        
+class TestBoardBlockGroup(unittest.TestCase):
+    def SetUp(self):
+        pass
+        
+    def test_init(self):
+        pass
+        
+#TODO Extend suite
 suite = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlock)
 unittest.TextTestRunner(verbosity=2).run(suite)
 

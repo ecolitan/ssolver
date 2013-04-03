@@ -34,6 +34,30 @@ class BoardBlock(object):
         """
         return self.squares.values()
         
+    def update_squares_from_group(self, group):
+        """
+        Update values of squares attribute
+        """
+        for index, key in enumerate(self.squares):
+            self.squares[key] = group[index]
+        return self.squares
+        
+class BoardBlockGroup(object):
+    """
+    Collection of three BoardBlock Objects
+    
+    * There are 6 Possible BoardBlockRows
+    * Initiate the group by specifying three BoardBlocks in an tuple.
+    * The members must make up three adjacent rows or columns.
+    * Invalid groups are checked for. 
+    * Orientation is calculated from the group members specified. 
+    """
+    
+    def __init__(self, members=()):
+        self.members = members
+        self.row_group1 = []
+        self.row_group2 = []
+        self.row_group3 = []
     
 #~ a=BoardBlock()
 #~ print a.__dict__
