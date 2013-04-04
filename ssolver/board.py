@@ -53,11 +53,17 @@ class BoardBlockGroup(object):
     * Orientation is calculated from the group members specified. 
     """
     
-    def __init__(self, members=()):
+    def __init__(self, members):
         self.members = members
         self.row_group1 = []
         self.row_group2 = []
         self.row_group3 = []
+        
+        for i in (self.members[0], self.members[1], self.members[2]): 
+            if not i.__class__.__name__ == "BoardBlock":
+                raise BoardError('BoardBlockGroup must be instanciated with 3 BoardBlock Instances')
     
-#~ a=BoardBlock()
-#~ print a.__dict__
+class BoardError(Exception):
+    def __init__(self, msg=''):
+        self.msg = msg
+        print self.msg

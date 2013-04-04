@@ -20,7 +20,7 @@ import unittest
 from collections import OrderedDict
 
 from ssolver.ssolver import SSolver, DimError
-from ssolver.board import BoardBlock
+from ssolver.board import BoardBlock, BoardBlockGroup, BoardError
 
 class TestBoardBlock(unittest.TestCase):
     
@@ -82,10 +82,22 @@ class TestBoardBlockGroup(unittest.TestCase):
         pass
         
     def test_init(self):
-        pass
+        #__init__()
+        
+        #raise if not instanciated correctly
+        with self.assertRaises(BoardError):
+            BoardBlockGroup([1,2,3])
+        with self.assertRaises(TypeError):
+            BoardBlockGroup(1)
+        with self.assertRaises(IndexError):
+            BoardBlockGroup([])
+            
+        #BoardBlock instances must be unique
+        
+        #BoardBlock instances must be adjacent
         
 #TODO Extend suite
-suite = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlock)
+suite = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlockGroup)
 unittest.TextTestRunner(verbosity=2).run(suite)
 
 
