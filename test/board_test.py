@@ -77,6 +77,23 @@ class TestBoardBlock(unittest.TestCase):
         
         self.assertEqual(test_squares3, test_block2.update_squares_from_group(test_group2))
         
+    def test_hash(self):
+        #test correct hashability of BoardBlock
+        test_pos1 = (0,0)
+        test_squares1 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_block1 = BoardBlock(test_pos1, test_squares1)
+        test_block2 = BoardBlock(test_pos1, test_squares1)
+            
+        self.assertTrue(test_block1 == test_block2)
+        
 class TestBoardBlockGroup(unittest.TestCase):
     def SetUp(self):
         pass
@@ -97,8 +114,10 @@ class TestBoardBlockGroup(unittest.TestCase):
         #BoardBlock instances must be adjacent
         
 #TODO Extend suite
-suite = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlockGroup)
-unittest.TextTestRunner(verbosity=2).run(suite)
+suite1 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlockGroup)
+suite2 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlock)
+unittest.TextTestRunner(verbosity=2).run(suite1)
+unittest.TextTestRunner(verbosity=2).run(suite2)
 
 
         #~ self.cube0 = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]

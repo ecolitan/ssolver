@@ -28,6 +28,15 @@ class BoardBlock(object):
         self.position = position          # Position of Block 
         self.squares = squares            # OrderedDict( ( (x0,y0),[] ), ((x1,y1), []), ... , ((xn,yn), []) )
         
+    def __key(self):
+        return (self.position, self.squares)
+
+    def __eq__(x, y):
+        return x.__key() == y.__key()
+
+    def __hash__(self):
+        return hash(self.__key())
+        
     def group(self):
         """
         Return the possible-values list of the Block
