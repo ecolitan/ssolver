@@ -17,6 +17,7 @@
 '''
 
 import unittest
+import pickle
 from collections import OrderedDict
 
 from ssolver.ssolver import SSolver, DimError
@@ -108,11 +109,60 @@ class TestBoardBlockGroup(unittest.TestCase):
             BoardBlockGroup(1)
         with self.assertRaises(IndexError):
             BoardBlockGroup([])
-            
-        #BoardBlock instances must be unique
+        
+        #test that BoardBlock instances are unique
+        test_pos1 = (0,0)
+        test_squares1 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_block1 = BoardBlock(test_pos1, test_squares1)
+        with self.assertRaises(BoardError):
+            BoardBlockGroup((test_block1, test_block1, test_block1))
         
         #BoardBlock instances must be adjacent
+        test_pos1 = (0,0)
+        test_pos2 = (1,0)
+        test_pos3 = (1,2)
+        test_squares1 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_squares2 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_squares3 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_block1 = BoardBlock(test_pos1, test_squares1)
+        test_block2 = BoardBlock(test_pos2, test_squares2)
+        test_block3 = BoardBlock(test_pos3, test_squares3)
         
+        with self.assertRaises(BoardError):
+            BoardBlockGroup((test_block1, test_block2, test_block3))
+            
 #TODO Extend suite
 suite1 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlockGroup)
 suite2 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlock)

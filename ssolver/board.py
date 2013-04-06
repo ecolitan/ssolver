@@ -67,10 +67,23 @@ class BoardBlockGroup(object):
         self.row_group1 = []
         self.row_group2 = []
         self.row_group3 = []
-        
+        self.legal_combinations = ( ((0,0),(0,1),(0,2)),
+                                    ((1,0),(1,1),(1,2)),
+                                    ((2,0),(2,1),(2,2)),
+                                    ((0,0),(1,0),(2,0)),
+                                    ((0,1),(1,1),(2,1)),
+                                    ((0,2),(1,2),(2,2)) )
+            
+        #instanciate only with three unique BoardBlock instances
         for i in (self.members[0], self.members[1], self.members[2]): 
             if not i.__class__.__name__ == "BoardBlock":
-                raise BoardError('BoardBlockGroup must be instanciated with 3 BoardBlock Instances')
+                raise BoardError('BoardBlockGroup must be instanciated with 3 unique BoardBlock Instances')
+        if (self.members[0] == self.members[1] or self.members[1] == self.members[2]):
+            raise BoardError('BoardBlockGroup must be instanciated with 3 unique BoardBlock instances')
+            
+        #BoardBlock instances must be adjacent group in a line
+        if (self.members[0].position, self.members[1].position, self.members[2].position) not in self.legal_combinations:
+            raise BoardError('BoardBlockGroup must be adjacent in a line')
     
 class BoardError(Exception):
     def __init__(self, msg=''):
