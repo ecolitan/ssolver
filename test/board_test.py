@@ -36,7 +36,6 @@ class TestBoardBlock(unittest.TestCase):
     def test_group(self):
         #group()
         
-        test_pos1 = (0,0)
         test_squares1 = OrderedDict(( ((0,0),[2]),
                                       ((0,1),[1,9]),
                                       ((0,2),[1,5,9]),
@@ -47,14 +46,13 @@ class TestBoardBlock(unittest.TestCase):
                                       ((2,1),[7]),
                                       ((2,2),[1,5,9]) ) )
         test_group1 = [ [2], [1,9], [1,5,9], [3], [8], [1,5,6,9], [4], [7], [1,5,9], ]
-        test_block1 = BoardBlock(test_pos1, test_squares1)
+        test_block1 = BoardBlock(test_squares1)
         
         self.assertEqual(test_group1, test_block1.group())
         
     def test_update_squares_from_group(self):
         #update_squares_from_group()
         
-        test_pos2 = (0,0)
         test_group2 = [[2], [1, 9], [1, 5, 9], [3], [8], [6], [4], [7], [1, 5, 9]]
         test_squares2 = OrderedDict(( ((0,0),[2]),
                                       ((0,1),[1,9]),
@@ -74,13 +72,12 @@ class TestBoardBlock(unittest.TestCase):
                                       ((2,0),[4]),
                                       ((2,1),[7]),
                                       ((2,2),[1,5,9]) ) )
-        test_block2 = BoardBlock(test_pos2, test_squares2)
+        test_block2 = BoardBlock(test_squares2)
         
         self.assertEqual(test_squares3, test_block2.update_squares_from_group(test_group2))
         
     def test_hash(self):
         #test correct hashability of BoardBlock
-        test_pos1 = (0,0)
         test_squares1 = OrderedDict(( ((0,0),[2]),
                                       ((0,1),[1,9]),
                                       ((0,2),[1,5,9]),
@@ -90,8 +87,8 @@ class TestBoardBlock(unittest.TestCase):
                                       ((2,0),[4]),
                                       ((2,1),[7]),
                                       ((2,2),[1,5,9]) ) )
-        test_block1 = BoardBlock(test_pos1, test_squares1)
-        test_block2 = BoardBlock(test_pos1, test_squares1)
+        test_block1 = BoardBlock(test_squares1)
+        test_block2 = BoardBlock(test_squares1)
             
         self.assertTrue(test_block1 == test_block2)
         
@@ -109,9 +106,8 @@ class TestBoardBlockGroup(unittest.TestCase):
             BoardBlockGroup(1)
         with self.assertRaises(IndexError):
             BoardBlockGroup([])
-        
+            
         #test that BoardBlock instances are unique
-        test_pos1 = (0,0)
         test_squares1 = OrderedDict(( ((0,0),[2]),
                                       ((0,1),[1,9]),
                                       ((0,2),[1,5,9]),
@@ -121,47 +117,33 @@ class TestBoardBlockGroup(unittest.TestCase):
                                       ((2,0),[4]),
                                       ((2,1),[7]),
                                       ((2,2),[1,5,9]) ) )
-        test_block1 = BoardBlock(test_pos1, test_squares1)
+        test_block1 = BoardBlock(test_squares1)
         with self.assertRaises(BoardError):
             BoardBlockGroup((test_block1, test_block1, test_block1))
         
         #BoardBlock instances must be adjacent
-        test_pos1 = (0,0)
-        test_pos2 = (1,0)
-        test_pos3 = (1,2)
-        test_squares1 = OrderedDict(( ((0,0),[2]),
-                                      ((0,1),[1,9]),
-                                      ((0,2),[1,5,9]),
-                                      ((1,0),[3]),
-                                      ((1,1),[8]),
-                                      ((1,2),[6]),
-                                      ((2,0),[4]),
-                                      ((2,1),[7]),
-                                      ((2,2),[1,5,9]) ) )
-        test_squares2 = OrderedDict(( ((0,0),[2]),
-                                      ((0,1),[1,9]),
-                                      ((0,2),[1,5,9]),
-                                      ((1,0),[3]),
-                                      ((1,1),[8]),
-                                      ((1,2),[6]),
-                                      ((2,0),[4]),
-                                      ((2,1),[7]),
-                                      ((2,2),[1,5,9]) ) )
-        test_squares3 = OrderedDict(( ((0,0),[2]),
-                                      ((0,1),[1,9]),
-                                      ((0,2),[1,5,9]),
-                                      ((1,0),[3]),
-                                      ((1,1),[8]),
-                                      ((1,2),[6]),
-                                      ((2,0),[4]),
-                                      ((2,1),[7]),
-                                      ((2,2),[1,5,9]) ) )
-        test_block1 = BoardBlock(test_pos1, test_squares1)
-        test_block2 = BoardBlock(test_pos2, test_squares2)
-        test_block3 = BoardBlock(test_pos3, test_squares3)
-        
+        test_squares1 = OrderedDict(( ((0,0),[]),((0,1),[]),((0,2),[]),
+                                      ((1,0),[]),((1,1),[]),((1,2),[]),
+                                      ((2,0),[]),((2,1),[]),((2,2),[]) ) )
+        test_squares2 = OrderedDict(( ((3,0),[]),((3,1),[]),((3,2),[]),
+                                      ((4,0),[]),((4,1),[]),((4,2),[]),
+                                      ((5,0),[]),((5,1),[]),((5,2),[]) ) )
+        test_squares3 = OrderedDict(( ((6,0),[]),((6,1),[]),((6,2),[]),
+                                      ((7,0),[]),((7,1),[]),((7,2),[]),
+                                      ((8,0),[]),((8,1),[]),((8,2),[]) ) )
+        test_squares4 = OrderedDict(( ((6,3),[]),((6,3),[]),((6,3),[]),
+                                      ((7,4),[]),((7,4),[]),((7,4),[]),
+                                      ((8,5),[]),((8,5),[]),((8,5),[]) ) )
+        test_block1 = BoardBlock(test_squares1)
+        test_block2 = BoardBlock(test_squares2)
+        test_block3 = BoardBlock(test_squares3)
+        test_block4 = BoardBlock(test_squares4)
+        #not adjactent (raises BoardError)
         with self.assertRaises(BoardError):
-            BoardBlockGroup((test_block1, test_block2, test_block3))
+            BoardBlockGroup((test_block1, test_block2, test_block4))
+        #adjacent
+        BoardBlockGroup((test_block1, test_block2, test_block3))
+        
             
 #TODO Extend suite
 suite1 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlockGroup)

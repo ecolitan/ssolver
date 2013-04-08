@@ -24,12 +24,17 @@ class BoardBlock(object):
     
     There are 9 Blocks on the sudoku board.
     """
-    def __init__(self,position=(),squares=OrderedDict()):
-        self.position = position          # Position of Block 
+    def __init__(self, squares=OrderedDict()):
         self.squares = squares            # OrderedDict( ( (x0,y0),[] ), ((x1,y1), []), ... , ((xn,yn), []) )
+        self.position = ()
+        
+        #set position value
+        for i in self.squares.keys():
+            self.position = i
+            break
         
     def __key(self):
-        return (self.position, self.squares)
+        return (self.squares)
 
     def __eq__(x, y):
         return x.__key() == y.__key()
@@ -64,15 +69,15 @@ class BoardBlockGroup(object):
     
     def __init__(self, members):
         self.members = members
-        self.row_group1 = []
-        self.row_group2 = []
-        self.row_group3 = []
-        self.legal_combinations = ( ((0,0),(0,1),(0,2)),
-                                    ((1,0),(1,1),(1,2)),
-                                    ((2,0),(2,1),(2,2)),
-                                    ((0,0),(1,0),(2,0)),
-                                    ((0,1),(1,1),(2,1)),
-                                    ((0,2),(1,2),(2,2)) )
+        self.row1 = OrderedDict()            # OrderedDict( ( (x0,y0),[] ), ((x1,y1), []), ... , ((xn,yn), []) )
+        self.row2 = OrderedDict()
+        self.row3 = OrderedDict()
+        self.legal_combinations = ( ((0,0),(0,3),(0,6)),
+                                    ((3,0),(3,3),(3,6)),
+                                    ((6,0),(6,3),(6,6)),
+                                    ((0,0),(3,0),(6,0)),
+                                    ((0,3),(3,3),(6,3)),
+                                    ((0,6),(3,6),(6,6)) )
             
         #instanciate only with three unique BoardBlock instances
         for i in (self.members[0], self.members[1], self.members[2]): 
@@ -84,6 +89,14 @@ class BoardBlockGroup(object):
         #BoardBlock instances must be adjacent group in a line
         if (self.members[0].position, self.members[1].position, self.members[2].position) not in self.legal_combinations:
             raise BoardError('BoardBlockGroup must be adjacent in a line')
+            
+        #generate row attributes
+        
+    def lines(self):
+        '''
+        Return three lines
+        '''
+        pass
     
 class BoardError(Exception):
     def __init__(self, msg=''):
