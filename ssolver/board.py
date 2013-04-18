@@ -128,33 +128,8 @@ class BoardBlockGroup(object):
         #Update orientation
         self.orientation = self.row_col[members_positions]
         
-        #generate long lines (called rows)
-        if self.orientation == 'col':
-            line1_seg1 = self.members[0].cols()[0]
-            line2_seg1 = self.members[0].cols()[1]
-            line3_seg1 = self.members[0].cols()[2]
-            line1_seg2 = self.members[1].cols()[0]
-            line2_seg2 = self.members[1].cols()[1]
-            line3_seg2 = self.members[1].cols()[2]
-            line1_seg3 = self.members[2].cols()[0]
-            line2_seg3 = self.members[2].cols()[1]
-            line3_seg3 = self.members[2].cols()[2]
-        elif self.orientation == 'row':
-            line1_seg1 = self.members[0].rows()[0]
-            line2_seg1 = self.members[0].rows()[1]
-            line3_seg1 = self.members[0].rows()[2]
-            line1_seg2 = self.members[1].rows()[0]
-            line2_seg2 = self.members[1].rows()[1]
-            line3_seg2 = self.members[1].rows()[2]
-            line1_seg3 = self.members[2].rows()[0]
-            line2_seg3 = self.members[2].rows()[1]
-            line3_seg3 = self.members[2].rows()[2]
-            
-        line1 = OrderedDict(line1_seg1 + line1_seg2 + line1_seg3)
-        line2 = OrderedDict(line2_seg1 + line2_seg2 + line2_seg3)
-        line3 = OrderedDict(line3_seg1 + line3_seg2 + line3_seg3)
+        #update long lines (called rows)
         self.rows = self.lines()
-        
         
     def lines(self):
         '''
