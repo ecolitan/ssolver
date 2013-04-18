@@ -56,6 +56,24 @@ class BoardBlock(object):
             self.squares[key] = group[index]
         return self.squares
         
+    def rows(self):
+        """
+        return rows
+        """
+        row1 = ((self.squares.items()[0],self.squares.items()[1],self.squares.items()[2]))
+        row2 = ((self.squares.items()[3],self.squares.items()[4],self.squares.items()[5]))
+        row3 = ((self.squares.items()[6],self.squares.items()[7],self.squares.items()[8]))
+        return (row1,row2,row3)
+            
+    def cols(self):
+        """
+        return cols
+        """
+        col1 = ((self.squares.items()[0],self.squares.items()[3],self.squares.items()[6]))
+        col2 = ((self.squares.items()[1],self.squares.items()[4],self.squares.items()[7]))
+        col3 = ((self.squares.items()[2],self.squares.items()[5],self.squares.items()[8]))
+        return (col1,col2,col3)
+        
 class BoardBlockGroup(object):
     """
     Collection of three BoardBlock Objects
@@ -69,34 +87,103 @@ class BoardBlockGroup(object):
     
     def __init__(self, members):
         self.members = members
-        self.row1 = OrderedDict()            # OrderedDict( ( (x0,y0),[] ), ((x1,y1), []), ... , ((xn,yn), []) )
-        self.row2 = OrderedDict()
-        self.row3 = OrderedDict()
-        self.legal_combinations = ( ((0,0),(0,3),(0,6)),
-                                    ((3,0),(3,3),(3,6)),
-                                    ((6,0),(6,3),(6,6)),
-                                    ((0,0),(3,0),(6,0)),
-                                    ((0,3),(3,3),(6,3)),
-                                    ((0,6),(3,6),(6,6)) )
+        self.rows = ()              # ( OrderedDict(), OrderedDict(), OrderedDict() )
+        self.orientation = ''       # row or col
+        self.row_mapper = { ((0,0),(0,3),(0,6)):(((0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6),(0,7),(0,8)),
+                                                ((1,0),(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8)),
+                                                ((2,0),(2,1),(2,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,8))),
+                            ((3,0),(3,3),(3,6)):(((3,0),(3,1),(3,2),(3,3),(3,4),(3,5),(3,6),(3,7),(3,8)),
+                                                ((4,0),(4,1),(4,2),(4,3),(4,4),(4,5),(4,6),(4,7),(4,8)),
+                                                ((5,0),(5,1),(5,2),(5,3),(5,4),(5,5),(5,6),(5,7),(5,8))),
+                            ((6,0),(6,3),(6,6)):(((6,0),(6,1),(6,2),(6,3),(6,4),(6,5),(6,6),(6,7),(6,8)),
+                                                ((7,0),(7,1),(7,2),(7,3),(7,4),(7,5),(7,6),(7,7),(7,8)),
+                                                ((8,0),(8,1),(8,2),(8,3),(8,4),(8,5),(8,6),(8,7),(8,8))),
+                            ((0,0),(3,0),(6,0)):(((0,0),(1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),(8,0)),
+                                                ((0,1),(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1)),
+                                                ((0,2),(1,2),(2,2),(3,2),(4,2),(5,2),(6,2),(7,2),(8,2))),
+                            ((0,3),(3,3),(6,3)):(((0,3),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8,3)),
+                                                ((0,4),(1,4),(2,4),(3,4),(4,4),(5,4),(6,4),(7,4),(8,4)),
+                                                ((0,5),(1,5),(2,5),(3,5),(4,5),(5,5),(6,5),(7,5),(8,5))),
+                            ((0,6),(3,6),(6,6)):(((0,6),(1,6),(2,6),(3,6),(4,6),(5,6),(6,6),(7,6),(8,6)),
+                                                ((0,7),(1,7),(2,7),(3,7),(4,7),(5,7),(6,7),(7,7),(8,7)),
+                                                ((0,8),(1,8),(2,8),(3,8),(4,8),(5,8),(6,8),(7,8),(8,8)))}
+        self.row_col = { ((0,0),(0,3),(0,6)):'row',
+                         ((3,0),(3,3),(3,6)):'row',
+                         ((6,0),(6,3),(6,6)):'row',
+                         ((0,0),(3,0),(6,0)):'col',
+                         ((0,3),(3,3),(6,3)):'col',
+                         ((0,6),(3,6),(6,6)):'col'}
             
         #instanciate only with three unique BoardBlock instances
-        for i in (self.members[0], self.members[1], self.members[2]): 
+        for i in self.members: 
             if not i.__class__.__name__ == "BoardBlock":
                 raise BoardError('BoardBlockGroup must be instanciated with 3 unique BoardBlock Instances')
         if (self.members[0] == self.members[1] or self.members[1] == self.members[2]):
             raise BoardError('BoardBlockGroup must be instanciated with 3 unique BoardBlock instances')
             
         #BoardBlock instances must be adjacent group in a line
-        if (self.members[0].position, self.members[1].position, self.members[2].position) not in self.legal_combinations:
+        members_positions = (self.members[0].position, self.members[1].position, self.members[2].position)
+        if members_positions not in self.row_mapper.keys():
             raise BoardError('BoardBlockGroup must be adjacent in a line')
+        #Update orientation
+        self.orientation = self.row_col[members_positions]
+        
+        #generate long lines (called rows)
+        if self.orientation == 'col':
+            line1_seg1 = self.members[0].cols()[0]
+            line2_seg1 = self.members[0].cols()[1]
+            line3_seg1 = self.members[0].cols()[2]
+            line1_seg2 = self.members[1].cols()[0]
+            line2_seg2 = self.members[1].cols()[1]
+            line3_seg2 = self.members[1].cols()[2]
+            line1_seg3 = self.members[2].cols()[0]
+            line2_seg3 = self.members[2].cols()[1]
+            line3_seg3 = self.members[2].cols()[2]
+        elif self.orientation == 'row':
+            line1_seg1 = self.members[0].rows()[0]
+            line2_seg1 = self.members[0].rows()[1]
+            line3_seg1 = self.members[0].rows()[2]
+            line1_seg2 = self.members[1].rows()[0]
+            line2_seg2 = self.members[1].rows()[1]
+            line3_seg2 = self.members[1].rows()[2]
+            line1_seg3 = self.members[2].rows()[0]
+            line2_seg3 = self.members[2].rows()[1]
+            line3_seg3 = self.members[2].rows()[2]
             
-        #generate row attributes
+        line1 = OrderedDict(line1_seg1 + line1_seg2 + line1_seg3)
+        line2 = OrderedDict(line2_seg1 + line2_seg2 + line2_seg3)
+        line3 = OrderedDict(line3_seg1 + line3_seg2 + line3_seg3)
+        self.rows = self.lines()
+        
         
     def lines(self):
         '''
         Return three lines
         '''
-        pass
+        if self.orientation == 'col':
+            line1_seg1 = self.members[0].cols()[0]
+            line2_seg1 = self.members[0].cols()[1]
+            line3_seg1 = self.members[0].cols()[2]
+            line1_seg2 = self.members[1].cols()[0]
+            line2_seg2 = self.members[1].cols()[1]
+            line3_seg2 = self.members[1].cols()[2]
+            line1_seg3 = self.members[2].cols()[0]
+            line2_seg3 = self.members[2].cols()[1]
+            line3_seg3 = self.members[2].cols()[2]
+        elif self.orientation == 'row':
+            line1_seg1 = self.members[0].rows()[0]
+            line2_seg1 = self.members[0].rows()[1]
+            line3_seg1 = self.members[0].rows()[2]
+            line1_seg2 = self.members[1].rows()[0]
+            line2_seg2 = self.members[1].rows()[1]
+            line3_seg2 = self.members[1].rows()[2]
+            line1_seg3 = self.members[2].rows()[0]
+            line2_seg3 = self.members[2].rows()[1]
+            line3_seg3 = self.members[2].rows()[2]
+        line1 = OrderedDict(line1_seg1 + line1_seg2 + line1_seg3)
+        line2 = OrderedDict(line2_seg1 + line2_seg2 + line2_seg3)
+        line3 = OrderedDict(line3_seg1 + line3_seg2 + line3_seg3)
+        return (line1, line2, line3)
     
 class BoardError(Exception):
     def __init__(self, msg=''):

@@ -73,7 +73,6 @@ class TestBoardBlock(unittest.TestCase):
                                       ((2,1),[7]),
                                       ((2,2),[1,5,9]) ) )
         test_block2 = BoardBlock(test_squares2)
-        
         self.assertEqual(test_squares3, test_block2.update_squares_from_group(test_group2))
         
     def test_hash(self):
@@ -91,6 +90,40 @@ class TestBoardBlock(unittest.TestCase):
         test_block2 = BoardBlock(test_squares1)
             
         self.assertTrue(test_block1 == test_block2)
+        
+    def test_rows(self):
+        #test BoardBlock correctly returns its rows
+        test_squares1 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_block1 = BoardBlock(test_squares1)
+        test_row1 = ((((0,0),[2]),((0,1),[1,9]),((0,2),[1,5,9])))
+        test_row2 = ((((1,0),[3]),((1,1),[8]),((1,2),[6])))
+        test_row3 = ((((2,0),[4]),((2,1),[7]),((2,2),[1,5,9])))
+        self.assertEqual(test_block1.rows(), (test_row1, test_row2, test_row3))
+        
+    def test_cols(self):
+        #test BoardBlock correctly returns its cols
+        test_squares1 = OrderedDict(( ((0,0),[2]),
+                                      ((0,1),[1,9]),
+                                      ((0,2),[1,5,9]),
+                                      ((1,0),[3]),
+                                      ((1,1),[8]),
+                                      ((1,2),[6]),
+                                      ((2,0),[4]),
+                                      ((2,1),[7]),
+                                      ((2,2),[1,5,9]) ) )
+        test_block1 = BoardBlock(test_squares1)
+        test_col1 = ((((0,0),[2]),((1,0),[3]),((2,0),[4])))
+        test_col2 = ((((0,1),[1,9]),((1,1),[8]),((2,1),[7])))
+        test_col3 = ((((0,2),[1,5,9]),((1,2),[6]),((2,2),[1,5,9])))
+        self.assertEqual(test_block1.cols(), (test_col1, test_col2, test_col3))
         
 class TestBoardBlockGroup(unittest.TestCase):
     def SetUp(self):
@@ -141,10 +174,51 @@ class TestBoardBlockGroup(unittest.TestCase):
         #not adjactent (raises BoardError)
         with self.assertRaises(BoardError):
             BoardBlockGroup((test_block1, test_block2, test_block4))
-        #adjacent
-        BoardBlockGroup((test_block1, test_block2, test_block3))
         
+        #test correct orientation
+        test_boardblock = BoardBlockGroup((test_block1, test_block2, test_block3))
+        self.assertEqual('col', test_boardblock.orientation)
+        
+        #correctly calculate group rows
+        test_boardblock = BoardBlockGroup((test_block1, test_block2, test_block3))
+        test_row1 = OrderedDict(( ((0,0),[]),((1,0),[]),((2,0),[]),
+                                  ((3,0),[]),((4,0),[]),((5,0),[]),
+                                  ((6,0),[]),((7,0),[]),((8,0),[]) ) )
+        test_row2 = OrderedDict(( ((0,1),[]),((1,1),[]),((2,1),[]),
+                                  ((3,1),[]),((4,1),[]),((5,1),[]),
+                                  ((6,1),[]),((7,1),[]),((8,1),[]) ) )
+        test_row3 = OrderedDict(( ((0,2),[]),((1,2),[]),((2,2),[]),
+                                  ((3,2),[]),((4,2),[]),((5,2),[]),
+                                  ((6,2),[]),((7,2),[]),((8,2),[]) ) )
+        self.assertEqual((test_row1, test_row2, test_row3), test_boardblock.rows)
+        
+    def test_lines(self):
+        #lines()
+        test_squares1 = OrderedDict(( ((0,0),[]),((0,1),[]),((0,2),[]),
+                                      ((1,0),[]),((1,1),[]),((1,2),[]),
+                                      ((2,0),[]),((2,1),[]),((2,2),[]) ) )
+        test_squares2 = OrderedDict(( ((3,0),[]),((3,1),[]),((3,2),[]),
+                                      ((4,0),[]),((4,1),[]),((4,2),[]),
+                                      ((5,0),[]),((5,1),[]),((5,2),[]) ) )
+        test_squares3 = OrderedDict(( ((6,0),[]),((6,1),[]),((6,2),[]),
+                                      ((7,0),[]),((7,1),[]),((7,2),[]),
+                                      ((8,0),[]),((8,1),[]),((8,2),[]) ) )
+        test_block1 = BoardBlock(test_squares1)
+        test_block2 = BoardBlock(test_squares2)
+        test_block3 = BoardBlock(test_squares3)
+        test_boardblock = BoardBlockGroup((test_block1, test_block2, test_block3))
+        test_row1 = OrderedDict(( ((0,0),[]),((1,0),[]),((2,0),[]),
+                                  ((3,0),[]),((4,0),[]),((5,0),[]),
+                                  ((6,0),[]),((7,0),[]),((8,0),[]) ) )
+        test_row2 = OrderedDict(( ((0,1),[]),((1,1),[]),((2,1),[]),
+                                  ((3,1),[]),((4,1),[]),((5,1),[]),
+                                  ((6,1),[]),((7,1),[]),((8,1),[]) ) )
+        test_row3 = OrderedDict(( ((0,2),[]),((1,2),[]),((2,2),[]),
+                                  ((3,2),[]),((4,2),[]),((5,2),[]),
+                                  ((6,2),[]),((7,2),[]),((8,2),[]) ) )
             
+        self.assertEqual((test_row1, test_row2, test_row3), test_boardblock.lines())
+        
 #TODO Extend suite
 suite1 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlockGroup)
 suite2 = unittest.TestLoader().loadTestsFromTestCase(TestBoardBlock)
@@ -152,32 +226,4 @@ unittest.TextTestRunner(verbosity=2).run(suite1)
 unittest.TextTestRunner(verbosity=2).run(suite2)
 
 
-        #~ self.cube0 = [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]]
-        #~ self.cube1 = [[0, 3], [0, 4], [0, 5], [1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5]]
-        #~ self.cube2 = [[0, 6], [0, 7], [0, 8], [1, 6], [1, 7], [1, 8], [2, 6], [2, 7], [2, 8]]
-        #~ self.cube3 = [[3, 0], [3, 1], [3, 2], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]]
-        #~ self.cube4 = [[3, 3], [3, 4], [3, 5], [4, 3], [4, 4], [4, 5], [5, 3], [5, 4], [5, 5]]
-        #~ self.cube5 = [[3, 6], [3, 7], [3, 8], [4, 6], [4, 7], [4, 8], [5, 6], [5, 7], [5, 8]]
-        #~ self.cube6 = [[6, 0], [6, 1], [6, 2], [7, 0], [7, 1], [7, 2], [8, 0], [8, 1], [8, 2]]
-        #~ self.cube7 = [[6, 3], [6, 4], [6, 5], [7, 3], [7, 4], [7, 5], [8, 3], [8, 4], [8, 5]]
-        #~ self.cube8 = [[6, 6], [6, 7], [6, 8], [7, 6], [7, 7], [7, 8], [8, 6], [8, 7], [8, 8]]
-        #~ 
-        #~ self.row0 = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8]]
-        #~ self.row1 = [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8]]
-        #~ self.row2 = [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8]]
-        #~ self.row3 = [[3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8]]
-        #~ self.row4 = [[4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [4, 7], [4, 8]]
-        #~ self.row5 = [[5, 0], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8]]
-        #~ self.row6 = [[6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6], [6, 7], [6, 8]]
-        #~ self.row7 = [[7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8]]
-        #~ self.row8 = [[8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 6], [8, 7], [8, 8]]
-        #~ 
-        #~ self.col0 = [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0]]
-        #~ self.col1 = [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1]]
-        #~ self.col2 = [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]]
-        #~ self.col3 = [[0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3]]
-        #~ self.col4 = [[0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4], [8, 4]]
-        #~ self.col5 = [[0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5]]
-        #~ self.col6 = [[0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6], [8, 6]]
-        #~ self.col7 = [[0, 7], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7], [8, 7]]
-        #~ self.col8 = [[0, 8], [1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8]]
+        
